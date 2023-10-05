@@ -15,8 +15,8 @@ type binary_op =
   | LtOrEq (* <= *)
   | Gt (* > *)
   | GtOrEq (* >= *)
-  | And (* and *)
-  | Or (* or *)
+  | And (* andalso*)
+  | Or (* orelse *)
 [@@deriving show { with_path = false }]
 
 type unary_op =
@@ -32,7 +32,7 @@ type expr =
   | EApp of expr * expr (* f x *)
   | EAbs of identifier * expr (* fn x => x + 1 *)
   | EIfThenElse of expr * expr * expr (* if true then 1 else 2 *)
-  | ELet of identifier * decl list * expr (* let fun f x = x, val y = 1 in f 1 * y *)
+  | ELetIn of identifier * decl list * expr (* let fun f x = x, val y = 1 in f 1 * y *)
 
 and decl =
   | ValDec of identifier * expr (* val x = 88 *)
@@ -49,7 +49,7 @@ let e_app x1 x2 = EApp (x1, x2)
 let e_abs arg body = EAbs (arg, body)
 let e_if_then_else cond if_true if_false = EIfThenElse (cond, if_true, if_false)
 let e_binary_op op left right = EBinaryOp (op, left, right)
-let e_let x declaration body = ELet (x, declaration, body)
+let e_let x declaration body = ELetIn (x, declaration, body)
 
 (* declarations *)
 let e_val_dec value_id expression = ValDec (value_id, expression)
